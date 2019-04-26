@@ -1,8 +1,11 @@
 require("dotenv").config();
+
 var keys = require("./keys.js");
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 var moment = require('moment');
+var fs = require('fs');
+var request = require('request');
 
 var axios = require("axios");
 
@@ -60,88 +63,66 @@ function concertthis() {
 
 function spotifythissong() {
 
-}
+    spotify.search({
+        type: 'track',
+        query: value
+    }, function (err, data) {
+        if (err) {
+            return console.log('Error occurred: ' + err);
+        }
+        var artist = data.tracks.items[0].album.artists[0].name;
+        console.log(artist);
+        var song = data.tracks.items[0].name;
+        console.log(song);
+        var link = data.tracks.items[0].external_urls.spotify;
+        console.log(link);
+        var album = data.tracks.items[0].album.name;
+        console.log(album);
+
+    });
+
+};
 
 function moviethis() {
+    axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + value).then(
+        function (response) {
+            console.log(response.data);
+            var Title = response.data.Title;
+            console.log(Title);
+            var Year = response.data.Year;
+            console.log(Year);
+            for (var i = 0; i < Ratings.Length; i++){
+                // for each Rating{
+                
+                // }
+                var Ratings = response.data.Ratings[i].Source[0];
+                console.log(Ratings);
+            }
+            var Country = response.data.Country;
+            console.log(Country);
+            var Language = response.data.Language;
+            console.log(Language);
+            var Plot = response.data.Plot;
+            console.log(Plot);
+            var Actors = response.data.Actors;
+            console.log(Actors);
+        },
 
+        function (error) {
+            if (error.response) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                console.log(error.request);
+            } else {
+                console.log("Error", error.message);
+            }
+            console.log(error.config);
+        }
+    );
 }
 
 function dowhatitsays() {
 
 }
-
-// var fs = require("fs");
-
-// var action = process.argv[2];
-// var value = process.argv[3];
-
-// switch (action) {
-//     case "total":
-//         total();
-//         break;
-
-//     case "deposit":
-//         deposit();
-//         break;
-
-//     case "withdraw":
-//         withdraw();
-//         break;
-
-//     case "lotto":
-//         lotto();
-//         break;
-// }
-// function total() {
-//     fs.readFile("bank.txt", "utf8", function (err, data) {
-//         if (err) {
-//             return console.log(err);
-//         }
-//         data = data.split(", ");
-//         var result = 0;
-
-//         for (var i = 0; i < data.length; i++) {
-//             if (parseFloat(data[i])) {
-//                 result += parseFloat(data[i]);
-//             }
-//         }
-//         console.log("You have a total of " + result.toFixed(2));
-//     });
-// }
-// function deposit() {
-//     fs.appendFile("bank.txt", ", " + value, function (err) {
-//         if (err) {
-//             return console.log(err);
-//         }
-//     });
-//     console.log("Deposited " + value + ".");
-// }
-// function withdraw() {
-//     fs.appendFile("bank.txt", ", -" + value, function (err) {
-//         if (err) {
-//             return console.log(err);
-//         }
-//     });
-//     console.log("Withdrew " + value + ".");
-// }
-// function lotto() {
-//     fs.appendFile("bank.txt", ", -.25", function (err) {
-//         if (err) {
-//             return console.log(err);
-//         }
-//     });
-
-//     var chance = Math.floor((Math.random() * 10) + 1);
-
-//     if (chance === 1) {
-//         fs.appendFile("bank.txt", ", 2", function (err) {
-//             if (err) {
-//                 return console.log(err);
-//             }
-//         });
-//         console.log("Congrats you won the lottery!");
-//     }
-//     else {
-//         console.log("Sorry. You just lost 25 cents.");
-//     }
-// }
