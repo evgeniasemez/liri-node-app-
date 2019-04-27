@@ -14,23 +14,24 @@ var value = process.argv[3];
 
 switch (action) {
     case "concert-this":
-        concertthis();
+        concertThis(value);
         break;
 
     case "spotify-this-song":
-        spotifythissong();
+        spotifyThisSong(value);
         break;
 
     case "movie-this":
-        moviethis();
+        movieThis(value);
         break;
 
     case "do-what-it-says":
-        dowhatitsays();
+        doWhatItSays();
         break;
 }
 // concert-this "Billie Eilish" - example
-function concertthis() {
+// something about catch instead of then
+function concertThis(value) {
     axios.get("https://rest.bandsintown.com/artists/" + value + "/events?app_id=codingbootcamp").then(
         function (response) {
             for (var i = 0; i < response.data.length; i++) {
@@ -43,6 +44,8 @@ function concertthis() {
                 var date = moment(response.data[i].datetime).format();
                 console.log("Date: " + date);
             }
+            // appending it to "do-what-it-says"
+            appendToFile(`concert-this,${value}`);
         },
 
         function (error) {
@@ -61,8 +64,7 @@ function concertthis() {
 
 }
 // spotify-this-song "Love Yourself" - example
-function spotifythissong() {
-
+function spotifyThisSong(value) {
     spotify.search({
         type: 'track',
         query: value
@@ -80,12 +82,14 @@ function spotifythissong() {
         console.log("Album: " + album);
 
     });
+    // appending it to "do-what-it-says"
+    appendToFile(`spotify-this-song,${value}`);
 
 };
 // movie-this Mr.Nobody - example
-function moviethis() {
-    axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + value).then(
-        function (response) {
+function movieThis(value) {
+    axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + value)
+        .then(function (response) {
             console.log(response.data);
             var Title = response.data.Title;
             console.log("Title: " + Title);
@@ -106,9 +110,11 @@ function moviethis() {
             console.log("Plot: " + Plot);
             var Actors = response.data.Actors;
             console.log("Actors: " + Actors);
-        },
 
-        function (error) {
+            // appending it to "do-what-it-says"
+            appendToFile(`movie-this,${value}`);
+        })
+        .catch(function (error) {
             if (error.response) {
                 console.log(error.response.data);
                 console.log(error.response.status);
@@ -119,32 +125,34 @@ function moviethis() {
                 console.log("Error", error.message);
             }
             console.log(error.config);
-        }
-    );
+        })
 }
 // do-what-it-says spotify-this-song,"I Want it That Way" - example
-function dowhatitsays() {
+function doWhatItSays() {
 
     fs.readFile("random.txt", "utf8", function (err, data) {
         if (err) {
             return console.log(err);
         }
         data = data.split(',');
-        if (data === "concert-this") {
-            concertThis();
-        } else if (data === "spotify-this-song") {
-            spotifyThisSong();
-        } else if (data === "movie-this") {
-            movieThis();
+        if (data[0] === "concert-this") {
+            concertThis(data[1]);
+        } else if (data[0] === "spotify-this-song") {
+            console.log(`sending ${data[1]} to spotify-this-song`);
+            spotifyThisSong(data[1]);
+        } else if (data[0] === "movie-this") {
+            movieThis(data[1]);
         }
     })
-    fs.appendFile("random.txt", text, function (err) {
+}
+
+function appendToFile(text) {
+    fs.appendFile("random.txt", `,${text}`, function (err) {
 
         // If an error was experienced we will log it.
         if (err) {
             console.log(err);
         }
-
         // If no error is experienced, we'll log the phrase "Content Added" to our node console.
         else {
             console.log("Content Added!");
@@ -152,5 +160,3 @@ function dowhatitsays() {
 
     });
 }
-
-
