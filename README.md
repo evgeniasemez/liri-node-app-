@@ -37,4 +37,7 @@ here is a screenshot:
 Check the log.txt file - all the search is saved there in the readable form.
 
 ## Here is a video of a user workflow 
-![Watch the video](assets/images/LIRI_Video.webm)
+To watch a video, please use this URL, which is a shareable link from my Drive:
+https://drive.google.com/open?id=1NWEaT6NMSht3VdFvBrrvAY8rUwzk1WF8 
+
+![Watch the video](assets/images/LIRI_VIDEO_USERS_FLOW.gif)
