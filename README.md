@@ -2,8 +2,6 @@
 
 This app allows to search for your favorite artist, album, and get more information on it like released year, country it was made, language it supports. By just typing a particular command user can get an extra knowledge and feel up to date with new artists and albums releaved.
 
-![Screenshot](./assets/images/trainScreenshot.png)
-
 ## Installation
 For the first example i used axios to get "https://rest.bandsintown.com/artists/"
 For the second example i used spotify.search
