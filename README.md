@@ -35,3 +35,6 @@ here is a screenshot:
 ![Screenshot](assets/images/do-what-it-says.png)
 
 Check the log.txt file - all the search is saved there in the readable form.
+
+## Here is a video of a user workflow 
+![Watch the video](assets/images/LIRI_Video.webm)
